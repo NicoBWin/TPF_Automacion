@@ -1,5 +1,6 @@
-% Configuración inicial del robot
+function [Bichito] = CreacionRobot()
 
+% Configuración inicial del robot
 % Número de links
 N = 5; 
 
@@ -71,7 +72,4 @@ Dim_h = [200, 150];
 %Posicion del vertice origen de la hoja respecto a la base
 Pos_h = [-100, 50, 0];
 
-
-
-
-
+end
