@@ -7,13 +7,13 @@
 close all; clear; clc
 %% Dimensiones Iniciales
 % Altura del lapiz
-pencil_height = 15;
+pencilHeight = 15;
 
 % Dimensiones de la hoja
-sheet_dimensions = [200, 150];
+sheetDimensions = [150, 200];
 
 % Vértice origen de la hoja (respecto a la base del Bichito)
-sheet_apex = [-100, 50, 0];
+sheetApex = [-100, 50, 0];
 
 % Posición Inicial
 q0 = deg2rad([90, 52.5, -75, -120, 0]);
@@ -26,4 +26,7 @@ q0 = deg2rad([90, 52.5, -75, -120, 0]);
 %% Configuración del Robot
 
 % Creacion del Robot
-[manipulador] = robotCreate(q0);
+[Bichito] = robotCreate(q0);
+
+%% Trayectoria
+qTrayectoria = controlPosicion(Bichito,[Rmin Rmax], q0, pts(1,:), pts(2,:),sheetDimensions);
