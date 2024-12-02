@@ -28,5 +28,8 @@ q0 = deg2rad([90, 52.5, -75, -120, 0]);
 % Creacion del Robot
 [Bichito] = robotCreate(q0);
 
+%% Espacio de trabajo 
+[rMax,rMin] = workSpace(Bichito, q0, sheetDimensions);
+
 %% Trayectoria
-qTrayectoria = controlPosicion(Bichito,[Rmin Rmax], q0, pts(1,:), pts(2,:),sheetDimensions);
+% qTrayectoria = controlPosition(Bichito, q0, pts(1,:), pts(2,:),sheetDimensions, pencilHeight);
