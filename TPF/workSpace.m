@@ -1,4 +1,4 @@
-function [rMax,rMin] = workSpace(Bichito, q0, sheetDimensions)
+function radios = workSpace(Bichito, q0, sheetDimensions)
     %% Graficar Espacio de Trabajo
     figure('Name', 'Mesa de Trabajo');
 
@@ -41,6 +41,7 @@ function [rMax,rMin] = workSpace(Bichito, q0, sheetDimensions)
     
     rMax = max(abs(zSupPos(:,2)));
     rMin = min(abs(zSupPos(5,2)));
+    radios = [rMin, rMax];
 
     a = sheetDimensions(2);
     b = sheetDimensions(1);
@@ -49,12 +50,4 @@ function [rMax,rMin] = workSpace(Bichito, q0, sheetDimensions)
     circle([0 0],rMin); % Círculo interno
     rectangle('Position', [(-b / 2) ((rMax - rMin) / 2 + rMin - a / 2) b a]);
     hold on
-end
-
-function plotCircle(centre, rad)
-    th = linspace(0, 2*pi, 100);
-    x = rad .* cos(th) + centre(1);
-    y = rad .* sin(th) + centre(2);
-    z = zeros(size(x));
-    plot3(x, y, z, 'r');
 end
