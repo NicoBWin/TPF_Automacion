@@ -40,4 +40,6 @@ else
     %% Trayectoria
     disp('Line is detected...');
     movimiento = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, pencilHeight);
+    % Plot Trayectoria Joint
+    plotter(Bichito, movimiento);
 end
