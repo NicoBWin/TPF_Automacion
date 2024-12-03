@@ -34,6 +34,11 @@ limitCoords(2) = round(limitCoords(2)*sheetDimensions(1));
 limitCoords(3) = round(limitCoords(3)*sheetDimensions(2));
 limitCoords(4) = round(limitCoords(4)*sheetDimensions(1)); 
 
+if all(limitCoords == 0)
+    disp('Hay un problema bro, sry...');
+else
+    %% Trayectoria
+    disp('Line is detected:');
 
-%% Trayectoria
-movimiento = controlPosition(Bichito, [rMax,rMin], q0, limitCoords, sheetDimensions, pencilHeight);
+    movimiento = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, pencilHeight);
+end
