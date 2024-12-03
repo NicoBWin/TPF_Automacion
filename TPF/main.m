@@ -11,11 +11,11 @@ close all; clear; clc
 % Altura del lapiz
 pencilHeight = 10;
 % Dimensiones de la hoja
-sheetDimensions = [150, 200];
+sheetDimensions = [200, 150];
 % Vértice origen de la hoja (respecto a la base del Bichito)
 sheetApex = [-100, 400, 65];
 % Posición Inicial
-q0 = deg2rad([90, 52.5, -75, -120, 0]);
+q0 = deg2rad([180, 52.5, -75, -120, 0]);
 
 %% Obtener Imagen
 [name,path]=uigetfile({'*.png;*.jpg;*.jpeg'});
@@ -26,14 +26,14 @@ clear path name
 [Bichito] = robotCreate(q0);
 
 %% Espacio de trabajo 
-[rMax,rMin] = workSpace(Bichito, q0, sheetDimensions);
+[rMax,rMin] = workSpace(Bichito, q0, sheetDimensions)
 
 %% Análisis de imagén
-limitCoords = lineDetector(fileName,1);
+limitCoords = lineDetector(fileName,0);
 limitCoords(1) = round(limitCoords(1)*sheetDimensions(2)) - 100;
-limitCoords(2) = 400 - round(limitCoords(2)*sheetDimensions(1)); 
+limitCoords(2) = 400 - round(limitCoords(2)*sheetDimensions(1));
 limitCoords(3) = round(limitCoords(3)*sheetDimensions(2)) - 100;
-limitCoords(4) = 400 - round(limitCoords(4)*sheetDimensions(1));  
+limitCoords(4) = 400 - round(limitCoords(4)*sheetDimensions(1)); 
 
 %% Trayectoria
-movimiento = controlPosition(Bichito, q0, limitCoords, sheetDimensions, pencilHeight);
+movimiento = controlPosition(Bichito, [rMax,rMin], q0, limitCoords, sheetDimensions, pencilHeight);

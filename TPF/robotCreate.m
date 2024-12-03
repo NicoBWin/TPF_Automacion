@@ -24,7 +24,6 @@ qlim{3} = deg2rad([-150,-40]);
 qlim{4} = deg2rad([-80,10]);
 qlim{5} = deg2rad([-1,1]);
 
-
 % Parámetros DH
 DH = struct('d', cell(1,N), 'alpha', cell(1,N), 'a', cell(1,N), 'theta', cell(1,N));
 DH(1).a = 0; DH(1).alpha = 0; DH(1).d = L(1); 

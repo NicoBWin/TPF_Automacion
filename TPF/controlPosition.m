@@ -5,11 +5,11 @@ function q = controlPosition(bicho, radios, q0, limitCoords, sheetDimensions, pe
     b = sheetDimensions(1);
     
     % Area de trabajo
-    Rmin = radios(1);
-    Rmax = radios(2);
+    Rmax = radios(1);
+    Rmin = radios(2);
     
     % Numero de puntos intermedios a calcular en una trayectoria
-    N = 20;
+    N = 30;
 
     %% Dibujamos el cuadrado de trabajo
     figure('Name','Trayectoria');

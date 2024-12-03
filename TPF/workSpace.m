@@ -12,7 +12,7 @@ function [rMax,rMin] = workSpace(Bichito, q0, sheetDimensions)
     % Array de ángulos
     theta = cell(1, Nlinks);
 
-    N = 5;
+    N = 4;
     for i = 1:Nlinks
         limiteInf = Bichito.qlim(i, 1);
         limiteSup = Bichito.qlim(i, 2);
