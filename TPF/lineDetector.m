@@ -80,6 +80,8 @@ function [limitCoords] = lineDetector(fileName, plots)
     % Warpear la imagen
     im_warpeada_l = imwarp(im_lineaRoja, tform, 'OutputView', imref2d([H W]));
     im_warpeada = imwarp(im, tform, 'OutputView', imref2d([H W]));
+     S = ones(10,10);
+    im_warpeada_l = iopen(im_warpeada_l,S);
     
     if(plots)
         figure(6)
@@ -87,7 +89,7 @@ function [limitCoords] = lineDetector(fileName, plots)
         figure(7)
         idisp(im_warpeada_l);
     end
-    extremos = icorner(im_warpeada_l, 'detector','harris','sigma',5,'cmin', 0.005, 'edgegap',1,'supress',1, 'nfeat', 2);
+    extremos = icorner(im_warpeada_l, 'detector','harris','sigma',5,'cmin', 0.0045, 'edgegap',1,'supress',1, 'nfeat', 2);
     
     u = extremos.u;
     v = extremos.v;
