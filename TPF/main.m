@@ -13,8 +13,6 @@ close all; clear; clc
 pencilHeight = 10;
 % Dimensiones de la hoja
 sheetDimensions = [200, 150];
-% Vértice origen de la hoja (respecto a la base del Bichito)
-sheetApex = [-100, 400, 65];
 % Posición Inicial
 q0 = deg2rad([90, 52.5, -75, -120, 0]);
 
@@ -29,12 +27,13 @@ clear path name
 %% Espacio de trabajo 
 radios = workSpace(Bichito, q0, sheetDimensions);
 
-%% Análisis de imagén
+% %% Análisis de imagén
 limitCoords = lineDetector(fileName,0);
-limitCoords(1) = round(limitCoords(1)*sheetDimensions(2)) - 100;
-limitCoords(2) = 400 - round(limitCoords(2)*sheetDimensions(1));
-limitCoords(3) = round(limitCoords(3)*sheetDimensions(2)) - 100;
-limitCoords(4) = 400 - round(limitCoords(4)*sheetDimensions(1)); 
+limitCoords(1) = round(limitCoords(1)*sheetDimensions(2));
+limitCoords(2) = round(limitCoords(2)*sheetDimensions(1));
+limitCoords(3) = round(limitCoords(3)*sheetDimensions(2));
+limitCoords(4) = round(limitCoords(4)*sheetDimensions(1)); 
+
 
 %% Trayectoria
-movimiento = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, pencilHeight);
+movimiento = controlPosition(Bichito, [rMax,rMin], q0, limitCoords, sheetDimensions, pencilHeight);
