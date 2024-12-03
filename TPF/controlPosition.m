@@ -30,16 +30,16 @@ function q = controlPosition(bicho, radios, q0, limitCoords, sheetDimensions, pe
     %LINE END
     xSheet = limitCoords(3);
     ySheet = limitCoords(4);
-    pfG(1) = -xSheet - b/2;
+    pfG(1) = xSheet - b/2;
     pfG(2) = -ySheet + Rmedio + a/2;
     pfG(3) = 0;
     pfG = pfG';
 
     % Matriz de rotación, indica la orientación del ee 
     %para escribir en la hoja respecto al sistema global
-    Rh0 = [0 0 -1 
-           0 -1 0
-          -1 0 0];
+    Rh0 = [0 0 1 
+           0 1 0
+          1 0 0];
 
     %Matriz de transformación del S.G. al punto inicial de la línea
     Ti0 = [[Rh0' -Rh0' * piG]; [0 0 0 1]]; 
