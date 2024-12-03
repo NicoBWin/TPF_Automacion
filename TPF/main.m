@@ -38,9 +38,9 @@ table_end = [100, 250, 65];       % Posición en diagonal a la posición anterio
 
 %% Análisis de imagén
 limitCoords = lineDetector(fileName,1);
-limitCoords(1) = round(limitCoords(1)*sheetDimensions(2)) - 100
-limitCoords(2) = 400 - round(limitCoords(2)*sheetDimensions(1))  
-limitCoords(3) = round(limitCoords(3)*sheetDimensions(2)) - 100
-limitCoords(4) = 400 - round(limitCoords(4)*sheetDimensions(1))  
+limitCoords(1) = round(limitCoords(1)*sheetDimensions(2)) - 100;
+limitCoords(2) = 400 - round(limitCoords(2)*sheetDimensions(1)); 
+limitCoords(3) = round(limitCoords(3)*sheetDimensions(2)) - 100;
+limitCoords(4) = 400 - round(limitCoords(4)*sheetDimensions(1));  
 %% Trayectoria
-% movimiento = controlPosition(Bichito, q0, pts(1,:), pts(2,:),sheetDimensions, pencilHeight);
+movimiento = controlPosition(Bichito, q0, limitCoords, sheetDimensions, pencilHeight);

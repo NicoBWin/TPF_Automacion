@@ -21,7 +21,6 @@ function [rMax,rMin] = workSpace(Bichito, q0, sheetDimensions)
         else
             theta{i} = linspace(limiteInf, limiteSup, N);
         end
-        size(theta{i})
     end
 
     %% Cálculos
