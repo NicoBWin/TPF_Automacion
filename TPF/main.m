@@ -10,7 +10,7 @@ close all; clear; clc
 
 %% Dimensiones Iniciales
 % Altura del lapiz
-pencilHeight = 100;
+pencilHeight = 80;
 % Dimensiones de la hoja
 sheetDimensions = [200, 150];
 % Posición Inicial

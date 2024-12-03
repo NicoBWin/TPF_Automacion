@@ -123,6 +123,7 @@ function [limitCoords] = lineDetector(fileName, plots)
         coord_B_ratio = [u(2)/W, v(2)/H];
 
         % Mostrar resultados
+        figure('Name', 'Line Detector');
         idisp(im_warpeada_l);
         hold on;
         plot([coord_A(1) coord_B(1)], [coord_A(2) coord_B(2)], 'r', 'LineWidth', 1);
