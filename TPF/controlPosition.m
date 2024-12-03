@@ -7,13 +7,12 @@ function q = controlPosition(bicho, radios, q0, limitCoords, sheetDimensions, pe
     % Area de trabajo
     Rmin = radios(1);
     Rmax = radios(2);
-    Rmedio = abs((radios(1) - radios(2))/2) + radios(1);
     
     % Numero de puntos intermedios a calcular en una trayectoria
     N = 20;
 
     %% Dibujamos el cuadrado de trabajo
-    fh = figure('Name','Trayectoria');
+    figure('Name','Trayectoria');
     bicho.plot(q0,'trail',{'r', 'LineWidth', 1,'LineStyle','--'}); 
     rectangle('Position', [(-(Rmax - Rmin) / 2 - Rmin - a / 2) (-b / 2) a b], 'EdgeColor', 'b'); 
     hold on
@@ -21,12 +20,12 @@ function q = controlPosition(bicho, radios, q0, limitCoords, sheetDimensions, pe
     %% Transformación de puntos al sistema global del actuador
     piG(1) = limitCoords(1);
     piG(2) = limitCoords(2);
-    piG(3) = 0;
+    piG(3) = 65;
     piG = piG';
 
     pfG(1) = limitCoords(3);
     pfG(2) = limitCoords(4);
-    pfG(3) = 0;
+    pfG(3) = 65;
     pfG = pfG';
 
     % Matriz de rotación, indica la orientación del ee 
@@ -44,7 +43,6 @@ function q = controlPosition(bicho, radios, q0, limitCoords, sheetDimensions, pe
     T0f = inv(Tf0);
     
     %% 1 - Posicionamiento del robot por encima de pi con pencilHeight
-
     %Agrego el offset para acercar el ee
     T0i_offset = T0i;
     T0i_offset(3,4) = T0i_offset(3,4) + pencilHeight;
@@ -56,13 +54,11 @@ function q = controlPosition(bicho, radios, q0, limitCoords, sheetDimensions, pe
 
 
     %% 2- Approach a la hoja (se baja pencilHeight)
-
     T0 = ctraj(SE3(T0i_offset),SE3(T0i),5);
     q{2} = bicho.ikine(T0, q{1}(end,:), 'mask', [1 1 1 0 1 1],'q0',q{1}(end,:));
     bicho.plot(q{2},'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
 
     %% 3- Dibujo la recta que une los puntos ingresados 
-
     T1 = ctraj(SE3(T0i),SE3(T0f),N);
     q{3} = bicho.ikine(T1, q{2}(end,:), 'mask', [1 1 1 0 1 1],'q0',q{2}(end,:));
     bicho.plot(q{3},'trail',{'b', 'LineWidth', 2});
@@ -89,4 +85,5 @@ function q = controlPosition(bicho, radios, q0, limitCoords, sheetDimensions, pe
     T3 = ctraj(SE3(T0f_offset),T_q0,N);
     q{5} = bicho.ikine(T3, q{4}(end,:), 'mask', [1 1 1 0 1 1],'q0',q{4}(end,:));
     bicho.plot(q{5},'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
+    
 end
