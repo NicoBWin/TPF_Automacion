@@ -19,9 +19,9 @@ L = [L1, sqrt(L2^2 + L3^2), L4, L5];
 % Límites angulares
 qlim = cell(1,N);
 qlim{1} = deg2rad([65,115]);
-qlim{2} = deg2rad([20,150]);
-qlim{3} = deg2rad([-150,-40]);
-qlim{4} = deg2rad([-80,10]);
+qlim{2} = deg2rad([10,160]);
+qlim{3} = deg2rad([-160,-30]);
+qlim{4} = deg2rad([-90,20]);
 qlim{5} = deg2rad([-1,1]);
 
 % Parámetros DH

@@ -46,6 +46,7 @@ function [rMax,rMin] = workSpace(Bichito, q0, sheetDimensions)
     
     circle([0 0],rMax); % Círculo externo
     circle([0 0],rMin); % Círculo interno
-    rectangle('Position', [(-(rMax - rMin) / 2 - rMin - b / 2) (-a / 2) b a]);
+    rectangle('Position', [((rMax - rMin) / 2 + rMin + b / 2) (a / 2) b a]);
     hold on
+
 end

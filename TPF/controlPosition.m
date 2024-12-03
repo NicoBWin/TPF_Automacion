@@ -20,12 +20,12 @@ function q = controlPosition(bicho, radios, q0, limitCoords, sheetDimensions, pe
     %% Transformación de puntos al sistema global del actuador
     piG(1) = limitCoords(1);
     piG(2) = limitCoords(2);
-    piG(3) = 65;
+    piG(3) = 0;
     piG = piG';
 
     pfG(1) = limitCoords(3);
     pfG(2) = limitCoords(4);
-    pfG(3) = 65;
+    pfG(3) = 0;
     pfG = pfG';
 
     % Matriz de rotación, indica la orientación del ee 

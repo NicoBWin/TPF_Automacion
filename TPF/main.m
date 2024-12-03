@@ -15,7 +15,7 @@ sheetDimensions = [200, 150];
 % Vértice origen de la hoja (respecto a la base del Bichito)
 sheetApex = [-100, 400, 65];
 % Posición Inicial
-q0 = deg2rad([180, 52.5, -75, -120, 0]);
+q0 = deg2rad([90, 52.5, -75, -120, 0]);
 
 %% Obtener Imagen
 [name,path]=uigetfile({'*.png;*.jpg;*.jpeg'});
