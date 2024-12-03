@@ -7,7 +7,7 @@ function q = controlPosition(bicho, radios, q0, limitCoords, sheetDimensions, pe
     % Area de trabajo
     rMin = radios(1);
     rMax = radios(2);
-    Rmedio = abs((rMax - rMin)/2) + rMin);
+    Rmedio = abs(((rMax - rMin)/2) + rMin);
     
     % Numero de puntos intermedios a calcular en una trayectoria
     N = 30;
@@ -15,23 +15,23 @@ function q = controlPosition(bicho, radios, q0, limitCoords, sheetDimensions, pe
     %% Dibujamos el cuadrado de trabajo
     figure('Name','Trayectoria');
     bicho.plot(q0,'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
-    rectangle('Position', [(-b / 2) ((rMax - rMin) / 2 + rMin + a / 2) b a], 'EdgeColor', 'b'); 
+    rectangle('Position', [(-b / 2) (Rmedio - a/2) b a], 'EdgeColor', 'b'); 
     hold on
 
     %% Transformación de puntos al sistema global del actuador
     %LINE INIT
     xSheet = limitCoords(1);
     ySheet = limitCoords(2);
-    piG(1) = -xSheet - Rmedio + a/2;
-    piG(2) = ySheet - b/2;
+    piG(1) = xSheet - b/2;
+    piG(2) = -ySheet + Rmedio + a/2;
     piG(3) = 0;
     piG = piG';
 
     %LINE END
     xSheet = limitCoords(3);
     ySheet = limitCoords(4);
-    pfG(1) = -xSheet - Rmedio + a/2;
-    pfG(2) = ySheet - b/2;
+    pfG(1) = -xSheet - b/2;
+    pfG(2) = -ySheet + Rmedio + a/2;
     pfG(3) = 0;
     pfG = pfG';
 

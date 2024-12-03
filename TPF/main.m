@@ -27,18 +27,17 @@ clear path name
 %% Espacio de trabajo 
 radios = workSpace(Bichito, q0, sheetDimensions);
 
-% %% Análisis de imagén
+%% Análisis de imagén
 limitCoords = lineDetector(fileName,0);
-limitCoords(1) = round(limitCoords(1)*sheetDimensions(2));
-limitCoords(2) = round(limitCoords(2)*sheetDimensions(1));
-limitCoords(3) = round(limitCoords(3)*sheetDimensions(2));
-limitCoords(4) = round(limitCoords(4)*sheetDimensions(1)); 
+limitCoords(1) = round(limitCoords(1)*sheetDimensions(1));
+limitCoords(2) = round(limitCoords(2)*sheetDimensions(2));
+limitCoords(3) = round(limitCoords(3)*sheetDimensions(1));
+limitCoords(4) = round(limitCoords(4)*sheetDimensions(2)); 
 
 if all(limitCoords == 0)
     disp('Hay un problema bro, sry...');
 else
     %% Trayectoria
     disp('Line is detected:');
-
     movimiento = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, pencilHeight);
 end

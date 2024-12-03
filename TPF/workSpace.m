@@ -48,6 +48,7 @@ function radios = workSpace(Bichito, q0, sheetDimensions)
     
     circle([0 0],rMax); % Círculo externo
     circle([0 0],rMin); % Círculo interno
-    rectangle('Position', [(-b / 2) ((rMax - rMin) / 2 + rMin - a / 2) b a]);
+    Rmedio = abs(((rMax - rMin)/2) + rMin);
+    rectangle('Position', [(-b / 2) (Rmedio - a / 2) b a]);
     hold on
 end
