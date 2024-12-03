@@ -1,8 +1,8 @@
-function q = controlPosition(bicho, radios, q0, limitCoords, sheetDimensions, pencilHeight)
+function q = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, pencilHeight)
     %% Parametros del programa
     % Dimensiones de la hoja
-    a = sheetDimensions(2);
-    b = sheetDimensions(1);
+    sheetWidth = sheetDimensions(2);
+    sheetLength = sheetDimensions(1);
     
     % Area de trabajo
     rMin = radios(1);
@@ -14,61 +14,60 @@ function q = controlPosition(bicho, radios, q0, limitCoords, sheetDimensions, pe
 
     %% Dibujamos el cuadrado de trabajo
     figure('Name','Trayectoria');
-    bicho.plot(q0,'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
-    rectangle('Position', [(-b / 2) (Rmedio - a/2) b a], 'EdgeColor', 'b'); 
+    Bichito.plot(q0,'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
+    rectangle('Position', [(-sheetLength / 2) (Rmedio - sheetWidth/2) sheetLength sheetWidth], 'EdgeColor', 'b'); 
     hold on
 
     %% Transformación de puntos al sistema global del actuador
     %LINE INIT
     xSheet = limitCoords(1);
     ySheet = limitCoords(2);
-    piG(1) = xSheet - b/2;
-    piG(2) = -ySheet + Rmedio + a/2;
+    piG(1) = xSheet - sheetLength/2;
+    piG(2) = -ySheet + Rmedio + sheetWidth/2;
     piG(3) = pencilHeight;
     piG = piG';
 
     %LINE END
     xSheet = limitCoords(3);
     ySheet = limitCoords(4);
-    pfG(1) = xSheet - b/2;
-    pfG(2) = -ySheet + Rmedio + a/2;
+    pfG(1) = xSheet - sheetLength/2;
+    pfG(2) = -ySheet + Rmedio + sheetWidth/2;
     pfG(3) = pencilHeight;
     pfG = pfG';
 
-    % Matriz de rotación, indica la orientación del ee 
-    %para escribir en la hoja respecto al sistema global
+    % Relación EE/Sist. Global
     Rh0 = [0 0 1 
            0 1 0
            1 0 0];
 
-    %Matriz de transformación del S.G. al punto inicial de la línea
+    % Matriz de transformación Sist. Global/pi
     Ti0 = [[Rh0' -Rh0' * piG]; [0 0 0 1]]; 
     T0i = inv(Ti0);
 
-    %Matriz de transformación del S.G. al punto final de la línea
+    % Matriz de transformación Sist. Global/pf
     Tf0 = [[Rh0' -Rh0' * pfG]; [0 0 0 1]]; 
     T0f = inv(Tf0);
     
-    %% 1 - Posicionamiento del robot por encima de pi con pencilHeight
-    %Agrego un offset para acercar el ee mas lento
+    %% 1 - Posicionamiento por encima del pi con pencilHeight
+    % Agrego un offset para acercar el EE mas lento
     T0i_offset = T0i;
     T0i_offset(3,4) = T0i_offset(3,4) + 10;
 
-    T_q0 = bicho.fkine(q0);
+    T_q0 = Bichito.fkine(q0);
     T0 = ctraj(T_q0,SE3(T0i_offset),N);
-    q{1} = bicho.ikine(T0, q0, 'mask', [1 1 1 0 1 1],'q0',q0);
-    bicho.plot(q{1},'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
+    q{1} = Bichito.ikine(T0, q0, 'mask', [1 1 1 0 1 1],'q0',q0);
+    Bichito.plot(q{1},'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
 
 
-    %% 2- Approach a la hoja (se baja pencilHeight)
+    %% 2- Acercamiento a la hoja
     T0 = ctraj(SE3(T0i_offset),SE3(T0i),5);
-    q{2} = bicho.ikine(T0, q{1}(end,:), 'mask', [1 1 1 0 1 1],'q0',q{1}(end,:));
-    bicho.plot(q{2},'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
+    q{2} = Bichito.ikine(T0, q{1}(end,:), 'mask', [1 1 1 0 1 1],'q0',q{1}(end,:));
+    Bichito.plot(q{2},'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
 
-    %% 3- Dibujo la recta que une los puntos ingresados 
+    %% 3- Dibujo de la recta 
     T1 = ctraj(SE3(T0i),SE3(T0f),N);
-    q{3} = bicho.ikine(T1, q{2}(end,:), 'mask', [1 1 1 0 1 1],'q0',q{2}(end,:));
-    bicho.plot(q{3},'trail',{'b', 'LineWidth', 2});
+    q{3} = Bichito.ikine(T1, q{2}(end,:), 'mask', [1 1 1 0 1 1],'q0',q{2}(end,:));
+    Bichito.plot(q{3},'trail',{'b', 'LineWidth', 2});
 
     translVecX = zeros(size(T1)); translVecY = zeros(size(T1)); translVecZ = zeros(size(T1));
     for i = 1:size(T1,2)
@@ -80,17 +79,17 @@ function q = controlPosition(bicho, radios, q0, limitCoords, sheetDimensions, pe
     plot3(translVecX,translVecY,translVecZ,'-r');
     hold on
 
-    %% 4- Retiramos de la hoja (subo pencilHeight)
+    %% 4- Alejamineto de la hoja
     T0f_offset = T0f;
     T0f_offset(3,4) = T0f_offset(3,4) + 10;
 
     T2 = ctraj(SE3(T0f),SE3(T0f_offset),5);
-    q{4} = bicho.ikine(T2, q{3}(end,:), 'mask', [1 1 1 0 1 1],'q0',q{3}(end,:));
-    bicho.plot(q{4},'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
+    q{4} = Bichito.ikine(T2, q{3}(end,:), 'mask', [1 1 1 0 1 1],'q0',q{3}(end,:));
+    Bichito.plot(q{4},'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
 
-    %% 5- Vuelvo a la posicion original
+    %% 5- Vuelta a posicion original
     T3 = ctraj(SE3(T0f_offset),T_q0,N);
-    q{5} = bicho.ikine(T3, q{4}(end,:), 'mask', [1 1 1 0 1 1],'q0',q{4}(end,:));
-    bicho.plot(q{5},'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
+    q{5} = Bichito.ikine(T3, q{4}(end,:), 'mask', [1 1 1 0 1 1],'q0',q{4}(end,:));
+    Bichito.plot(q{5},'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
     
 end

@@ -1,77 +1,79 @@
-function plotter(bicho, movimiento)
+function plotter(Bichito, motion)
+    % Número de enlaces en el robot
+    numLinks = numel(Bichito.links);
+    links = Bichito.links;
+    jointAngles = [];
 
-    Nlinks = numel(bicho.links);
-    links = bicho.links;
-    qMat = [];
-    for i = 1:size(movimiento,2)
-        aux = movimiento{i};
-        qMat = [qMat;aux];
+    % Concatenar todos los datos de movimiento en una sola matriz
+    for i = 1:size(motion, 2)
+        temp = motion{i};
+        jointAngles = [jointAngles; temp];
     end
-
-    figure('Name','Angulo de Joint');
-    for i = 1:Nlinks
-        subplot(Nlinks,1,i);
+    
+    %% Posiciones Angulares
+    % Graficar ángulos de las articulaciones a lo largo del tiempo
+    figure('Name', 'Joint Angles');
+    for i = 1:numLinks
+        subplot(numLinks, 1, i);
         if i == 1
-            plot(abs(qMat(:,i)),'LineWidth',1.5);
+            plot(abs(jointAngles(:, i)), 'LineWidth', 1.5);
         else 
-            plot(qMat(:,i),'LineWidth',1.5);
+            plot(jointAngles(:, i), 'LineWidth', 1.5);
         end
-        xlabel('Tiempo (s)')
-        ylabel('q (rad)')
-        ylim(links(i).qlim)
-        grid
+        xlabel('Time (s)');
+        ylabel('q (rad)');
+        ylim(links(i).qlim);
+        grid on;
     end
-    sgtitle('Angulo de Joint')
-    %%
-    vMat = derivarMatrizJoint(qMat);
+    sgtitle('Joint Angles');
 
-    %%
-    figure('Name','Velocidad Angular de Joint')
+    %% Velocidades Angulares
+    % Calcular velocidades de las articulaciones
+    jointVelocities = calculateDerivatives(jointAngles);
 
-     for i = 1:Nlinks
-        subplot(Nlinks,1,i);
-        plot(vMat(:,i),'LineWidth',1.5);
-
-        xlabel('Tiempo (s)')
-        ylabel('q'' (rad/s)')
-        grid
+    % Graficar velocidades de las articulaciones a lo largo del tiempo
+    figure('Name', 'Joint Angular Velocities');
+    for i = 1:numLinks
+        subplot(numLinks, 1, i);
+        plot(jointVelocities(:, i), 'LineWidth', 1.5);
+        xlabel('Tiempo (s)');
+        ylabel('q'' (rad/s)');
+        grid on;
     end
-    sgtitle('Velocidad Angular de Joint')
-    %%
-    aMat = derivarMatrizJoint(vMat);
+    sgtitle('Joint Angular Velocities');
 
-    figure('Name','Aceleracion Angular de Joint')
+    %% Aceleraciones Angulares
+    % Calcular aceleraciones de las articulaciones
+    jointAccelerations = calculateDerivatives(jointVelocities);
 
-    for i = 1:Nlinks
-        subplot(Nlinks,1,i);
-        plot(aMat(:,i),'LineWidth',1.5);
-
-        xlabel('Tiempo (s)')
-        ylabel('q'''' (rad/s^2)')
-        grid
+    % Graficar aceleraciones de las articulaciones a lo largo del tiempo
+    figure('Name', 'Joint Angular Accelerations');
+    for i = 1:numLinks
+        subplot(numLinks, 1, i);
+        plot(jointAccelerations(:, i), 'LineWidth', 1.5);
+        xlabel('Tiempo (s)');
+        ylabel('q'''' (rad/s^2)');
+        grid on;
     end
-    sgtitle('Aceleracion Angular de Joint')
-    %%
-    jMat = derivarMatrizJoint(aMat);
+    sgtitle('Joint Angular Accelerations');
 
-    figure('Name','Jerk')
+    %% Jerks
+    % Calcular jerks de las articulaciones
+    jointJerks = calculateDerivatives(jointAccelerations);
 
-    for i = 1:Nlinks
-        subplot(Nlinks,1,i);
-        plot(jMat(:,i),'LineWidth',1.5);
-        xlabel('Tiempo (s)')
-        ylabel('q'''''' (rad/s^2)')
-        grid
+    % Graficar jerks de las articulaciones a lo largo del tiempo
+    figure('Name', 'Joint Jerks');
+    for i = 1:numLinks
+        subplot(numLinks, 1, i);
+        plot(jointJerks(:, i), 'LineWidth', 1.5);
+        xlabel('Tiempo (s)');
+        ylabel("q''''' (rad/s^3)");
+        grid on;
     end
-    sgtitle('Jerk')
-    end
+    sgtitle('Joint Jerks');
+end
 
-    function vMat = derivarMatrizJoint(qMat)
-
-    qMatExt = [qMat(1,:);qMat;qMat(end,:)];
-    vMat = zeros(size(qMat));
-    for n = 2:size(qMatExt,1)-1
-        vMat(n-1,:) = mean([(qMatExt(n,:)-qMatExt(n-1,:))/1;(qMatExt(n+1,:)-qMatExt(n,:))/1]);
-    end
-
+function derivatives = calculateDerivatives(data)
+    derivatives = diff(data) / 0.01;                    % Paso de 0.01 s
+    derivatives = [derivatives; derivatives(end, :)];
 end

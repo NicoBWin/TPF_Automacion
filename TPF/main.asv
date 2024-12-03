@@ -37,10 +37,11 @@ limitCoords(4) = round(limitCoords(4)*sheetDimensions(2));
 if all(limitCoords == 0)
     disp('Hay un problema bro, sry...');
 else
-    disp('Line detected...');
-    %% Movimiento
-    motion = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, pencilHeight);
+    
+    
+%% Movimiento
+motion = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, pencilHeight);
 
-    %% Gráfico
-    plotter(Bichito, motion);
+%% Gráfico
+plotter(Bichito, motion);
 end
