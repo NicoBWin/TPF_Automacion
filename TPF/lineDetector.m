@@ -1,4 +1,4 @@
-function [limitCoords] = lineDetector(fileName)
+function [limitCoords] = lineDetector(fileName, plots)
 
     % Importo la imagen
     im = imread(fileName);
@@ -12,37 +12,48 @@ function [limitCoords] = lineDetector(fileName)
     im_lineaRoja = im_R > 105 & im_G < 100 & im_B < 100;
     S = ones(8, 8);
     im_lineaRoja = idilate(im_lineaRoja, S, 'none');
-    figure(1)
-    idisp(im_lineaRoja);
-
+    if(plots)
+        figure(1)
+        idisp(im_lineaRoja);
+    end
+    
     % Obtengo imagen logica de los bordes de la hoja
     im_hoja = im_grey > 0.12;
     im_bordeshoja = icanny(im_hoja);
     im_bordeshoja= idilate(im_bordeshoja, S, 'none');
-    figure(2)
-    idisp(im_bordeshoja);
+    if(plots)
+        figure(2)
+        idisp(im_bordeshoja);
+    end
 
     % Obtengo imagen logica de la imagen original
-    im_todo = im_grey > 0.5;
+    im_todo = im_grey > 0.51;
 
     % Sacamos la recta y terminamos con solo los marcos y el fondo
     im_todomenoslinea = im_todo | im_lineaRoja;
-    figure(3)
-    idisp(im_todomenoslinea);
-
+    if(plots)
+        figure(3)
+        idisp(im_todomenoslinea);
+    end
     % Sacamos el fondo negro
     im_marco = (~(im_todo | im_hoja))|im_todomenoslinea;
     im_marco = im_marco | im_bordeshoja;
-    figure(4)
-    idisp(im_marco);
+    if(plots)
+        figure(4)
+        idisp(im_marco);
+    end
 
     % Obtengo los bordes de la imagen
     bordes_h = icanny(im_marco);
-    h = Hough(bordes_h, 'houghthresh', 0.55, 'suppress', 10);
+    S = ones(4,4);
+    bordes_h = idilate(bordes_h,S);
+    h = Hough(bordes_h, 'houghthresh', 0.4, 'suppress', 33);
     lineas = h.lines();
-    figure(5)
-    idisp(bordes_h);
-    lineas.plot('r--')
+    if(plots)
+        figure(5)
+        idisp(bordes_h);
+        lineas.plot('r--')
+    end
 
     % Obtengo las coordenadas de las puntas de la imagen
     warped_coords = [];
@@ -69,27 +80,34 @@ function [limitCoords] = lineDetector(fileName)
     % Warpear la imagen
     im_warpeada_l = imwarp(im_lineaRoja, tform, 'OutputView', imref2d([H W]));
     im_warpeada = imwarp(im, tform, 'OutputView', imref2d([H W]));
-
-    figure(6)
-    idisp(im_warpeada);
-    figure(7)
-    idisp(im_warpeada_l);
-
+    
+    if(plots)
+        figure(6)
+        idisp(im_warpeada);
+        figure(7)
+        idisp(im_warpeada_l);
+    end
     extremos = icorner(im_warpeada_l, 'detector','harris','sigma',5,'cmin', 0.005, 'edgegap',1,'supress',1, 'nfeat', 2);
-
-    coord_A = coord_strvect(extremos(2).char());
-    coord_B = coord_strvect(extremos(1).char());
+    
+    u = extremos.u;
+    v = extremos.v;
+    
+    coord_A = [u(1), v(1)];
+    coord_B = [u(2), v(2)];
+    
+    coord_A_ratio = [u(1)/W, v(1)/H];
+    coord_B_ratio = [u(2)/W, v(2)/H];
 
     % Mostrar resultados
-    imshow(im_warpeada);
+    idisp(im_warpeada_l);
     hold on;
     plot([coord_A(1) coord_B(1)], [coord_A(2) coord_B(2)], 'r', 'LineWidth', 1);
     hold off;    
 
     limitCoords = zeros(2);
-    for i = 1:length(coord_A)
-        limitCoords(i,1) = coord_A(i);
-        limitCoords(i,2) = coord_B(i);
+    for i = 1:length(coord_A_ratio)
+        limitCoords(i,1) = coord_A_ratio(i);
+        limitCoords(i,2) = coord_B_ratio(i);
     end
 end
  
@@ -112,16 +130,3 @@ function punto = intersecciones(lineaA, lineaB, im)
     end
 end    
 
-function coordenada_double = coord_strvect(coord_string)
-    % Del string que llega, se queda con la info hasta el )
-    coord_string = extractBefore(coord_string, ')') ;
-
-    % Elimina tambien el '('. Queda el string ' x,y'
-    coord_string = strrep(coord_string, '(', ''); 
-
-    % Elimina los espacios en blanco al ppio y al final. Queda 'x,y'
-    coord_string = strtrim(coord_string);
-
-    % Genera un double con la coordenada, [x,y]
-    coordenada_double = str2double(split(coord_string, ','));
-end

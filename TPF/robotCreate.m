@@ -13,29 +13,16 @@ L2 = 144;
 L3 = 58;
 L4 = 144;
 L5 = 144;
-LEE = 30;
 
-L = [L1, sqrt(L2^2 + L3^2), L4, L5, LEE];
-
-% Masa de los links
-M = [1, 1, 1, 1, 1]; 
-
-% Momentos de inercia (masa unitaria concentrada)
-I = {0*eye(3), 0*eye(3),  0*eye(3),  0*eye(3), 0*eye(3)};  
-
-% Fricción unitaria
-B = [1, 1, 1, 1, 1]; 
-
-% Gear ratio (distinto de 0)
-GR = [1, 1, 1, 1, 1];
+L = [L1, sqrt(L2^2 + L3^2), L4, L5];
 
 % Límites angulares
 qlim = cell(1,N);
-qlim{1} = deg2rad([-180,180]);
-qlim{2} = deg2rad([-180,180]);
-qlim{3} = deg2rad([-180,180]);
-qlim{4} = deg2rad([-180,180]);
-qlim{5} = deg2rad([-180,180]);
+qlim{1} = deg2rad([65,115]);
+qlim{2} = deg2rad([20,150]);
+qlim{3} = deg2rad([-150,-40]);
+qlim{4} = deg2rad([-80,10]);
+qlim{5} = deg2rad([-1,1]);
 
 
 % Parámetros DH
@@ -50,12 +37,12 @@ DH(5).a = 0; DH(5).alpha = -pi/2; DH(5).d = L(4);
 % Arreglo de links
 for i = 1:N
     links{i} = Link(type{i}, 'modified', 'd', DH(i).d, 'a', DH(i).a, 'alpha', DH(i).alpha, ...
-        'I', I{i}, 'm', M(i), 'B', B(i), 'qlim', qlim{i}, 'G', GR(i)); 
+        'qlim', qlim{i}); 
 end
 
 %% Creación del Bichito
 
-Bichito = SerialLink([links{:}], 'tool', transl([0, 0, L(5)]), 'name', 'Bichito');
+Bichito = SerialLink([links{:}], 'tool', transl([0, 0, 0]), 'name', 'Bichito');
 
 % Posición inicial
 
