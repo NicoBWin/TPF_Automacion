@@ -40,8 +40,4 @@ function [Bichito] = robotCreate(q0)
 
     %% Creación del Bichito
     Bichito = SerialLink([links{:}], 'tool', transl([0, 0, 0]), 'name', 'Bichito');
-
-    % Posición inicial
-    figure()
-    Bichito.teach(q0)
 end

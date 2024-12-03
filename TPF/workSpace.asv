@@ -34,13 +34,11 @@ function [rMax,rMin] = workSpace(Bichito, q0, sheetDimensions)
     pos = pos';
 
     % Limitaciones físicas ("Mesa")
-    zSupPos = pos(pos(:,3) >= 0 & pos(:,2) > 0,:);
-
+    zSupPos = pos(pos(:,3) >= 0 & pos(:,2) > 0 & pos(:,3) < 1,:);
     scatter3(zSupPos(:,1), zSupPos(:,2), zSupPos(:,3),4, 'blue', 'filled');
-    hold on;
-    
-    rMax = max(abs(zSupPos(:,2)));
-    rMin = min(abs(zSupPos(5,2)));
+
+    rMax = max(abs(zSupPos(:,2)))
+    rMin = min(abs(zSupPos(:,2)))
 
     a = sheetDimensions(2);
     b = sheetDimensions(1);
@@ -49,12 +47,5 @@ function [rMax,rMin] = workSpace(Bichito, q0, sheetDimensions)
     circle([0 0],rMin); % Círculo interno
     rectangle('Position', [(-b / 2) ((rMax - rMin) / 2 + rMin - a / 2) b a]);
     hold on
-end
 
-function plotCircle(centre, rad)
-    th = linspace(0, 2*pi, 100);
-    x = rad .* cos(th) + centre(1);
-    y = rad .* sin(th) + centre(2);
-    z = zeros(size(x));
-    plot3(x, y, z, 'r');
 end
