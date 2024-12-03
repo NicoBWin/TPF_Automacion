@@ -13,18 +13,24 @@ function q = controlPosition(bicho, radios, q0, limitCoords, sheetDimensions, pe
 
     %% Dibujamos el cuadrado de trabajo
     figure('Name','Trayectoria');
-    bicho.plot(q0,'trail',{'r', 'LineWidth', 1,'LineStyle','--'}); 
-    rectangle('Position', [(-(Rmax - Rmin) / 2 - Rmin - a / 2) (-b / 2) a b], 'EdgeColor', 'b'); 
+    bicho.plot(q0,'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
+    rectangle('Position', [(-b / 2) ((Rmax - Rmin) / 2 + Rmin + a / 2) b a], 'EdgeColor', 'b'); 
     hold on
 
     %% Transformación de puntos al sistema global del actuador
-    piG(1) = limitCoords(1);
-    piG(2) = limitCoords(2);
+    %LINE INIT
+    xSheet = limitCoords(1);
+    ySheet = limitCoords(2);
+    piG(1) = -xSheet - Rmedio + a/2;
+    piG(2) = ySheet - b/2;
     piG(3) = 0;
     piG = piG';
 
-    pfG(1) = limitCoords(3);
-    pfG(2) = limitCoords(4);
+    %LINE END
+    xSheet = limitCoords(3);
+    ySheet = limitCoords(4);
+    pfG(1) = -xSheet - Rmedio + a/2;
+    pfG(2) = ySheet - b/2;
     pfG(3) = 0;
     pfG = pfG';
 
