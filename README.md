@@ -11,3 +11,15 @@ provisto por la catedra. El sofware que se utlizará para la caracterización y 
 -   Galan, Albetina
 -   Bustelo, Nicolás
 -   Ibañez, Lucía
+
+
+### TO DO List
+- [x] Crear Robot
+- [x] Vision
+- [ ] Testear Vision
+- [ ] Limites de espacio de trabajo
+- [ ] Simplificar creacion del robot
+- [ ] Computar trayectoria
+- [ ] Control posicion
+- [ ] Simulink control de posicion
+- [ ] Hacer PPT
