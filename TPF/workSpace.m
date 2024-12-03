@@ -4,7 +4,7 @@ function radios = workSpace(Bichito, q0, sheetDimensions)
 
     % Posición Inicial
     Bichito.plot(q0);
-    hold on;
+    hold on
 
     % Número de Links
     Nlinks = size(Bichito.links, 2);
@@ -37,7 +37,6 @@ function radios = workSpace(Bichito, q0, sheetDimensions)
     zSupPos = pos(pos(:,3) >= 0 & pos(:,2) > 0,:);
 
     scatter3(zSupPos(:,1), zSupPos(:,2), zSupPos(:,3),4, 'blue', 'filled');
-    hold on;
     
     rMax = max(abs(zSupPos(:,2)));
     rMin = min(abs(zSupPos(5,2)));
@@ -50,5 +49,4 @@ function radios = workSpace(Bichito, q0, sheetDimensions)
     circle([0 0],rMin); % Círculo interno
     Rmedio = abs(((rMax - rMin)/2) + rMin);
     rectangle('Position', [(-b / 2) (Rmedio - a / 2) b a]);
-    hold on
 end

@@ -28,7 +28,7 @@ clear path name
 radios = workSpace(Bichito, q0, sheetDimensions);
 
 %% Análisis de imagén
-limitCoords = lineDetector(fileName,1);
+limitCoords = lineDetector(fileName,0);
 limitCoords(1) = round(limitCoords(1)*sheetDimensions(1));
 limitCoords(2) = round(limitCoords(2)*sheetDimensions(2));
 limitCoords(3) = round(limitCoords(3)*sheetDimensions(1));
