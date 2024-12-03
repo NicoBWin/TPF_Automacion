@@ -7,6 +7,7 @@ function q = controlPosition(bicho, radios, q0, limitCoords, sheetDimensions, pe
     % Area de trabajo
     Rmax = radios(1);
     Rmin = radios(2);
+    Rmedio = abs((radios(1) - radios(2))/2) + radios(1);
     
     % Numero de puntos intermedios a calcular en una trayectoria
     N = 30;
