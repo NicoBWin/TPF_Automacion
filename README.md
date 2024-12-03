@@ -16,10 +16,13 @@ provisto por la catedra. El sofware que se utlizará para la caracterización y 
 ### TO DO List
 - [x] Crear Robot
 - [x] Vision
-- [ ] Testear Vision
-- [ ] Limites de espacio de trabajo
-- [ ] Simplificar creacion del robot
+- [x] Testear Vision
+- [x] Limites de espacio de trabajo
+- [x] Simplificar creacion del robot
 - [ ] Computar trayectoria
 - [ ] Control posicion
 - [ ] Simulink control de posicion
 - [ ] Hacer PPT
+
+### Presentacion 
+[CANVA](https://www.canva.com/design/DAGYQTuXs9g/iCDhz5jp1lKypZeDng02Tg/edit?utm_content=DAGYQTuXs9g&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
