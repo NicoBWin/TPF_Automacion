@@ -92,4 +92,26 @@ function q = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, 
     q{5} = Bichito.ikine(T3, q{4}(end,:), 'mask', [1 1 1 0 1 1],'q0',q{4}(end,:));
     Bichito.plot(q{5},'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
     
+    
+    %% Ploteo la trayectoria real vs. la recta obtenida por vision
+    
+    xLine = linspace(piG(1), pfG(1), 100); % Puntos de la recta en x
+    yLine = linspace(piG(2), pfG(2), 100); % Puntos de la recta en y
+
+    % Graficar la trayectoria
+    figure;
+    plot(translVecX, translVecY, 'b-', 'LineWidth', 1.5); % Trayectoria en azul
+    hold on;
+    plot(xLine, yLine, 'r--', 'LineWidth', 1.5); % Recta en rojo
+    
+    xlim([-100, 100]);
+    ylim([200, 350]);
+
+    % Estética del gráfico
+    xlabel('X [m]');
+    ylabel('Y [m]');
+    title('Trayectoria vs. recta');
+    legend('Trayectoria', 'Recta');
+    grid on;
+
 end
