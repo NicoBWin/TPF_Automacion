@@ -86,15 +86,15 @@ function [limitCoords] = lineDetector(fileName, plots)
         warped_coords = round(warped_coords);
         warped_coords = warped_coords';
         warped_coords = warped_coords(:, [2, 1]);
-
+        warped_coords = ordenarVertices(warped_coords)
+        %warped_coords = warped_coords(:, [2, 1])
         % Warpeo la imagen
         % Coordenadas de los puntos destino (esquinas ideales de la imagen)
         [H, W] = size(im_marco);
-        destination_coords = [1, H;              
-                          W, H;           
-                          1, 1;            
-                          W, 1];       
-
+        destination_coords = [1, 1;              
+                          1, H;           
+                          W , 1;            
+                          W, H];       
         % Calcular la transformación homográfica
          tform = fitgeotrans(warped_coords, destination_coords, 'projective');
 
@@ -110,8 +110,11 @@ function [limitCoords] = lineDetector(fileName, plots)
             figure(7)
             idisp(im_warpeada_l);
         end
+        catch error
+         fail = 1;
+         end
 
-        extremos = icorner(im_warpeada_l, 'detector','harris','sigma',5,'cmin', 0.004, 'edgegap',1,'supress',1, 'nfeat', 2);
+        extremos = icorner(im_warpeada_l, 'detector','harris','sigma',5,'cmin', 0.001, 'edgegap',1,'supress',1, 'nfeat', 2);
 
         u = extremos.u;
         v = extremos.v;
@@ -123,16 +126,15 @@ function [limitCoords] = lineDetector(fileName, plots)
         coord_B_ratio = [u(2)/W, v(2)/H];
 
         % Mostrar resultados
-        figure('Name', 'Line Detector');
         idisp(im_warpeada_l);
         hold on;
         plot([coord_A(1) coord_B(1)], [coord_A(2) coord_B(2)], 'r', 'LineWidth', 1);
         hold off;    
 
         limitCoords = zeros(2);
-    catch error
-        fail = 1;
-    end
+%     catch error
+%         fail = 1;
+%     end
     if ~fail
         for i = 1:length(coord_A_ratio)
             limitCoords(i,1) = coord_A_ratio(i);
@@ -164,4 +166,68 @@ function punto = intersecciones(lineaA, lineaB, im)
         punto = [];
     end
 end    
+
+% function sorted_coords = ordenarVertices(puntos)
+%     % puntos: matriz 4x2 donde cada fila es una coordenada (y, x)
+%     % sorted_coords: matriz 4x2 con las coordenadas ordenadas en el orden:
+%     % superior izquierdo, superior derecho, inferior izquierdo, inferior derecho
+% 
+%     % Redondear las coordenadas
+%     puntos = round(puntos);
+% 
+%     % Calcular el centro (promedio de las coordenadas)
+%     v_centro = mean(puntos(:, 2)); % Centro en y
+%     u_centro = mean(puntos(:, 1)); % Centro en x
+% 
+%     % Inicializar las variables para las posiciones
+%     UL = []; UR = []; DL = []; DR = [];
+% 
+%     % Clasificar los puntos en las regiones
+%     for iPunto = 1:4
+%         punto = puntos(iPunto, :); % Obtener la fila actual
+%         if punto(2) < v_centro && punto(1) < u_centro
+%             UL = punto; % Superior izquierdo
+%         elseif punto(2) < v_centro && punto(1) > u_centro
+%             UR = punto; % Superior derecho
+%         elseif punto(2) > v_centro && punto(1) < u_centro
+%             DL = punto; % Inferior izquierdo
+%         elseif punto(2) > v_centro && punto(1) > u_centro
+%             DR = punto; % Inferior derecho
+%         end
+%     end
+% 
+%     % Construir el resultado final
+%     sorted_coords = [UL; UR; DL; DR];
+% end
+
+function sorted_points = ordenarVertices(puntos)
+    % puntos: matriz Nx2 con las coordenadas (x, y) de los puntos.
+
+    % Separar las coordenadas x e y
+    x = puntos(:, 1);
+    y = puntos(:, 2);
+
+    % Determinar el punto más cercano a (1, 1) -> esquina superior izquierda
+    [~, idx1] = min(sum(puntos.^2, 2));
+    esquina_superior_izquierda = puntos(idx1, :);
+
+    % Determinar el punto más cercano a (1, H) -> esquina inferior izquierda
+    [~, idx2] = min((x - 1).^2 + (y - max(y)).^2);
+    esquina_inferior_izquierda = puntos(idx2, :);
+
+    % Determinar el punto más cercano a (W, 1) -> esquina superior derecha
+    [~, idx3] = min((x - max(x)).^2 + y.^2);
+    esquina_superior_derecha = puntos(idx3, :);
+
+    % Determinar el punto más cercano a (W, H) -> esquina inferior derecha
+    [~, idx4] = min((x - max(x)).^2 + (y - max(y)).^2);
+    esquina_inferior_derecha = puntos(idx4, :);
+
+    % Ordenar los puntos en el orden deseado
+    sorted_points = [esquina_superior_izquierda;
+                     esquina_inferior_izquierda;
+                     esquina_superior_derecha;
+                     esquina_inferior_derecha];
+end
+
 
