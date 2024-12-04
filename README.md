@@ -8,7 +8,7 @@ provisto por la catedra. El sofware que se utlizará para la caracterización y 
 ## Equipo
 
 -   Alvarez, Matías
--   Galan, Albetina
+-   Galan, Albertina
 -   Bustelo, Nicolás
 -   Ibañez, Lucía
 
@@ -21,6 +21,8 @@ provisto por la catedra. El sofware que se utlizará para la caracterización y 
 - [x] Simplificar creacion del robot
 - [x] Computar trayectoria
 - [x] Control posicion
+- [ ] Arreglar mesa fija
+- [ ] Probar distintos largos
 - [ ] Hacer PPT
 
 ### Presentacion 
