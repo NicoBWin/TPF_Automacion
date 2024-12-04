@@ -9,14 +9,15 @@ function [Bichito] = robotCreate(q0)
     % Longitud de los links (consigna)
     L1 = 130;
     L2 = 144;
-    L3 = 58;
+    L3 = 50;
     L4 = 144;
     L5 = 144;
-
+    
     L = [L1, sqrt(L2^2 + L3^2), L4, L5];
 
     % Límites angulares
     qlim = cell(1,N);
+    
     qlim{1} = deg2rad([55,125]);
     qlim{2} = deg2rad([10,160]);
     qlim{3} = deg2rad([-160,-30]);

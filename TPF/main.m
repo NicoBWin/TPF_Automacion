@@ -10,7 +10,7 @@ close all; clear; clc
 
 %% Dimensiones Iniciales
 % Altura del lapiz
-pencilHeight = 80;
+pencilHeight = 10;
 % Dimensiones de la hoja
 sheetDimensions = [200, 150];
 % Posición Inicial
@@ -34,11 +34,12 @@ limitCoords(2) = round(limitCoords(2)*sheetDimensions(2));
 limitCoords(3) = round(limitCoords(3)*sheetDimensions(1));
 limitCoords(4) = round(limitCoords(4)*sheetDimensions(2)); 
 
+%% Control del movimiento
 if all(limitCoords == 0)
     disp('Hay un problema bro, sry...');
 else
-    disp('Line detected...');
-    %% Movimiento
+    disp('Linea detecteda...');
+    % Movimiento
     motion = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, pencilHeight);
 
     %% Gráfico

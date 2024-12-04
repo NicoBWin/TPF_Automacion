@@ -67,7 +67,7 @@ function [limitCoords] = lineDetector(fileName, plots)
         bordes_h = icanny(im_marco);
         S = ones(4,4);
         bordes_h = idilate(bordes_h,S);
-        h = Hough(bordes_h, 'houghthresh', 0.5, 'suppress', 30);%0.45 33
+        h = Hough(bordes_h, 'houghthresh', 0.5, 'suppress', 30);    %0.45 33
         lineas = h.lines();
 
         if(plots)
@@ -86,8 +86,8 @@ function [limitCoords] = lineDetector(fileName, plots)
         warped_coords = round(warped_coords);
         warped_coords = warped_coords';
         warped_coords = warped_coords(:, [2, 1]);
-        warped_coords = ordenarVertices(warped_coords)
-        %warped_coords = warped_coords(:, [2, 1])
+        warped_coords = ordenarVertices(warped_coords);
+
         % Warpeo la imagen
         % Coordenadas de los puntos destino (esquinas ideales de la imagen)
         [H, W] = size(im_marco);
@@ -110,9 +110,6 @@ function [limitCoords] = lineDetector(fileName, plots)
             figure(7)
             idisp(im_warpeada_l);
         end
-        catch error
-         fail = 1;
-         end
 
         extremos = icorner(im_warpeada_l, 'detector','harris','sigma',5, 'edgegap',1,'supress',1, 'nfeat', 2);
 
@@ -132,9 +129,10 @@ function [limitCoords] = lineDetector(fileName, plots)
         hold off;    
 
         limitCoords = zeros(2);
-%     catch error
-%         fail = 1;
-%     end
+    catch 
+         fail = 1;
+    end
+    
     if ~fail
         for i = 1:length(coord_A_ratio)
             limitCoords(i,1) = coord_A_ratio(i);
@@ -167,38 +165,7 @@ function punto = intersecciones(lineaA, lineaB, im)
     end
 end    
 
-% function sorted_coords = ordenarVertices(puntos)
-%     % puntos: matriz 4x2 donde cada fila es una coordenada (y, x)
-%     % sorted_coords: matriz 4x2 con las coordenadas ordenadas en el orden:
-%     % superior izquierdo, superior derecho, inferior izquierdo, inferior derecho
-% 
-%     % Redondear las coordenadas
-%     puntos = round(puntos);
-% 
-%     % Calcular el centro (promedio de las coordenadas)
-%     v_centro = mean(puntos(:, 2)); % Centro en y
-%     u_centro = mean(puntos(:, 1)); % Centro en x
-% 
-%     % Inicializar las variables para las posiciones
-%     UL = []; UR = []; DL = []; DR = [];
-% 
-%     % Clasificar los puntos en las regiones
-%     for iPunto = 1:4
-%         punto = puntos(iPunto, :); % Obtener la fila actual
-%         if punto(2) < v_centro && punto(1) < u_centro
-%             UL = punto; % Superior izquierdo
-%         elseif punto(2) < v_centro && punto(1) > u_centro
-%             UR = punto; % Superior derecho
-%         elseif punto(2) > v_centro && punto(1) < u_centro
-%             DL = punto; % Inferior izquierdo
-%         elseif punto(2) > v_centro && punto(1) > u_centro
-%             DR = punto; % Inferior derecho
-%         end
-%     end
-% 
-%     % Construir el resultado final
-%     sorted_coords = [UL; UR; DL; DR];
-% end
+
 
 function sorted_points = ordenarVertices(puntos)
     % puntos: matriz Nx2 con las coordenadas (x, y) de los puntos.
