@@ -114,7 +114,7 @@ function [limitCoords] = lineDetector(fileName, plots)
          fail = 1;
          end
 
-        extremos = icorner(im_warpeada_l, 'detector','harris','sigma',5,'cmin', 0.001, 'edgegap',1,'supress',1, 'nfeat', 2);
+        extremos = icorner(im_warpeada_l, 'detector','harris','sigma',5, 'edgegap',1,'supress',1, 'nfeat', 2);
 
         u = extremos.u;
         v = extremos.v;
