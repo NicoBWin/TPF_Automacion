@@ -19,10 +19,9 @@ provisto por la catedra. El sofware que se utlizará para la caracterización y 
 - [x] Testear Vision
 - [x] Limites de espacio de trabajo
 - [x] Simplificar creacion del robot
-- [ ] Computar trayectoria
-- [ ] Control posicion
-- [ ] Simulink control de posicion
+- [x] Computar trayectoria
+- [x] Control posicion
 - [ ] Hacer PPT
 
 ### Presentacion 
-[CANVA](https://www.canva.com/design/DAGYQTuXs9g/iCDhz5jp1lKypZeDng02Tg/edit?utm_content=DAGYQTuXs9g&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+[TP Final](https://www.canva.com/design/DAGYQTuXs9g/iCDhz5jp1lKypZeDng02Tg/edit?utm_content=DAGYQTuXs9g&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
