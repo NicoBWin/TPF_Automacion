@@ -7,7 +7,7 @@ function q = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, 
     % Area de trabajo
     rMin = radios(1);
     rMax = radios(2);
-    Rmedio = abs(((rMax - rMin)/2) + rMin);
+    Rmedio = abs(((rMax - rMin)/2) + rMin); % Si quiero que la hoja este fija, pongo Rmedio = 275
     
     % Numero de puntos intermedios a calcular en una trayectoria
     N = 30;
@@ -104,8 +104,10 @@ function q = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, 
     hold on;
     plot(xLine, yLine, 'r--', 'LineWidth', 1.5); % Recta en rojo
     
-    xlim([-100, 100]);
-    ylim([200, 350]);
+    rectangle('Position', [(-sheetLength / 2) (Rmedio - sheetWidth/2) sheetLength sheetWidth], 'EdgeColor', 'b');
+    
+    xlim([-150, 150]);
+    ylim([150, 400]);
 
     % Estética del gráfico
     xlabel('X [m]');
