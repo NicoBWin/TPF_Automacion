@@ -7,11 +7,11 @@ function [Bichito] = robotCreate(q0)
     type = {'revolute', 'revolute', 'revolute', 'revolute', 'revolute'};
 
     % Longitud de los links (consigna)
-    L1 = 130;
-    L2 = 144;
-    L3 = 50;
-    L4 = 144;
-    L5 = 144;
+    L1 = 130; %MIN=0 | MAX=200
+    L2 = 144; %MIN=80 | MAX=500
+    L3 = 50; %MIN=0 | MAX=600
+    L4 = 144; %MIN=80 | MAX=1000
+    L5 = 144; %MIN=0 | MAX=700
     
     L = [L1, sqrt(L2^2 + L3^2), L4, L5];
 

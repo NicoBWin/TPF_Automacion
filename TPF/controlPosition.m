@@ -10,7 +10,7 @@ function q = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, 
     Rmedio = abs(((rMax - rMin)/2) + rMin); % Si quiero que la hoja este fija, pongo Rmedio = 275
     
     % Numero de puntos intermedios a calcular en una trayectoria
-    N = 30;
+    N = 15;
 
     %% Dibujamos el cuadrado de trabajo
     figure('Name','Trayectoria');
@@ -60,7 +60,7 @@ function q = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, 
 
 
     %% 2- Acercamiento a la hoja
-    T0 = ctraj(SE3(T0i_offset),SE3(T0i),5);
+    T0 = ctraj(SE3(T0i_offset),SE3(T0i),N);
     q{2} = Bichito.ikine(T0, q{1}(end,:), 'mask', [1 1 1 0 1 1],'q0',q{1}(end,:));
     Bichito.plot(q{2},'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
 
@@ -83,7 +83,7 @@ function q = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, 
     T0f_offset = T0f;
     T0f_offset(3,4) = T0f_offset(3,4) + 10;
 
-    T2 = ctraj(SE3(T0f),SE3(T0f_offset),5);
+    T2 = ctraj(SE3(T0f),SE3(T0f_offset),N);
     q{4} = Bichito.ikine(T2, q{3}(end,:), 'mask', [1 1 1 0 1 1],'q0',q{3}(end,:));
     Bichito.plot(q{4},'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
 
