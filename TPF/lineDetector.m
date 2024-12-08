@@ -83,14 +83,14 @@ function [limitCoords] = lineDetector(fileName, plots)
                 warped_coords = [warped_coords, intersecciones(lineas(i), lineas(j), im_marco)];
             end
         end
+        [H, W] = size(im_marco);
         warped_coords = round(warped_coords);
         warped_coords = warped_coords';
         warped_coords = warped_coords(:, [2, 1]);
-        warped_coords = ordenarVertices(warped_coords);
+        warped_coords = ordenarVertices(warped_coords, W, H);
 
         % Warpeo la imagen
         % Coordenadas de los puntos destino (esquinas ideales de la imagen)
-        [H, W] = size(im_marco);
         destination_coords = [1, 1;              
                           1, H;           
                           W , 1;            
@@ -167,35 +167,41 @@ function punto = intersecciones(lineaA, lineaB, im)
 end    
 
 
+function sorted_points = ordenarVertices(puntos, W, H)
+    % puntos: matriz 4x2 con las coordenadas (x, y) de los puntos.
+    % W, H: ancho y alto de la imagen.
+    % Definir las esquinas ideales
+    esquinas = [1, 1;      % Esquina superior izquierda
+                1, H;      % Esquina inferior izquierda
+                W, 1;      % Esquina superior derecha
+                W, H];     % Esquina inferior derecha
 
-function sorted_points = ordenarVertices(puntos)
-    % puntos: matriz Nx2 con las coordenadas (x, y) de los puntos.
+    % Generar todas las permutaciones posibles de los puntos
+    permutaciones = perms(1:4);
+    num_perms = size(permutaciones, 1);
+    
+    % Inicializar el error mínimo y la mejor asignación
+    min_ecm = inf;
+    mejor_asignacion = [];
 
-    % Separar las coordenadas x e y
-    x = puntos(:, 1);
-    y = puntos(:, 2);
+    % Evaluar el ECM para cada permutación
+    for i = 1:num_perms
+        perm = permutaciones(i, :);
+        puntos_permutados = puntos(perm, :);
+        
+        % Calcular el error cuadrático medio para esta permutación
+        errores = sqrt(sum((puntos_permutados - esquinas).^2, 2));
+        ecm = mean(errores.^2);
+        
+        % Actualizar si se encuentra un menor ECM
+        if ecm < min_ecm
+            min_ecm = ecm;
+            mejor_asignacion = puntos_permutados;
+        end
+    end
 
-    % Determinar el punto más cercano a (1, 1) -> esquina superior izquierda
-    [~, idx1] = min(sum(puntos.^2, 2));
-    esquina_superior_izquierda = puntos(idx1, :);
-
-    % Determinar el punto más cercano a (1, H) -> esquina inferior izquierda
-    [~, idx2] = min((x - 1).^2 + (y - max(y)).^2);
-    esquina_inferior_izquierda = puntos(idx2, :);
-
-    % Determinar el punto más cercano a (W, 1) -> esquina superior derecha
-    [~, idx3] = min((x - max(x)).^2 + y.^2);
-    esquina_superior_derecha = puntos(idx3, :);
-
-    % Determinar el punto más cercano a (W, H) -> esquina inferior derecha
-    [~, idx4] = min((x - max(x)).^2 + (y - max(y)).^2);
-    esquina_inferior_derecha = puntos(idx4, :);
-
-    % Ordenar los puntos en el orden deseado
-    sorted_points = [esquina_superior_izquierda;
-                     esquina_inferior_izquierda;
-                     esquina_superior_derecha;
-                     esquina_inferior_derecha];
+    % Devolver la mejor asignación encontrada
+    sorted_points = mejor_asignacion;
 end
 
 
