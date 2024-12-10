@@ -18,7 +18,7 @@ function q = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, 
     rectangle('Position', [(-sheetLength / 2) (Rmedio - sheetWidth/2) sheetLength sheetWidth], 'EdgeColor', 'b'); 
     hold on
 
-    %% Transformación de puntos al sistema global del actuador
+    %% Transformación de puntos al sistema de referencia del actuador
     %LINE INIT
     xSheet = limitCoords(1);
     ySheet = limitCoords(2);
