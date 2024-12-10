@@ -60,7 +60,7 @@ function q = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, 
 
 
     %% 2- Acercamiento a la hoja
-    T0 = ctraj(SE3(T0i_offset),SE3(T0i),N);
+    T0 = ctraj(SE3(T0i_of),SE3(T0i),N);
     q{2} = Bichito.ikine(T0, q{1}(end,:), 'mask', [1 1 1 0 1 1],'q0',q{1}(end,:));
     Bichito.plot(q{2},'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
 
