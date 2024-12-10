@@ -9,7 +9,7 @@ function q = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, 
     rMax = radios(2);
     Rmedio = abs(((rMax - rMin)/2) + rMin); % Si quiero que la hoja este fija, pongo Rmedio = 275
     
-    % Numero de puntos intermedios a calcular en una trayectoria
+    % Numero de puntos intermedios a calcular en una trayectoria ctraj
     N = 15;
 
     %% Dibujamos el cuadrado de trabajo
@@ -22,18 +22,18 @@ function q = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, 
     %LINE INIT
     xSheet = limitCoords(1);
     ySheet = limitCoords(2);
-    piG(1) = xSheet - sheetLength/2;
-    piG(2) = -ySheet + Rmedio + sheetWidth/2;
-    piG(3) = pencilHeight;
-    piG = piG';
+    pi(1) = xSheet - sheetLength/2;
+    pi(2) = -ySheet + Rmedio + sheetWidth/2;
+    pi(3) = pencilHeight;
+    pi = pi';
 
     %LINE END
     xSheet = limitCoords(3);
     ySheet = limitCoords(4);
-    pfG(1) = xSheet - sheetLength/2;
-    pfG(2) = -ySheet + Rmedio + sheetWidth/2;
-    pfG(3) = pencilHeight;
-    pfG = pfG';
+    pf(1) = xSheet - sheetLength/2;
+    pf(2) = -ySheet + Rmedio + sheetWidth/2;
+    pf(3) = pencilHeight;
+    pf = pf';
 
     % Relación EE/Sist. Global
     Rh0 = [0 0 1 
@@ -41,20 +41,20 @@ function q = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, 
            1 0 0];
 
     % Matriz de transformación Sist. Global/pi
-    Ti0 = [[Rh0' -Rh0' * piG]; [0 0 0 1]]; 
+    Ti0 = [[Rh0' -Rh0' * pi]; [0 0 0 1]]; 
     T0i = inv(Ti0);
 
     % Matriz de transformación Sist. Global/pf
-    Tf0 = [[Rh0' -Rh0' * pfG]; [0 0 0 1]]; 
+    Tf0 = [[Rh0' -Rh0' * pf]; [0 0 0 1]]; 
     T0f = inv(Tf0);
     
     %% 1 - Posicionamiento por encima del pi con pencilHeight
     % Agrego un offset para acercar el EE mas lento
-    T0i_offset = T0i;
-    T0i_offset(3,4) = T0i_offset(3,4) + 10;
+    T0i_of = T0i;
+    T0i_of(3,4) = T0i_of(3,4) + 10;
 
     T_q0 = Bichito.fkine(q0);
-    T0 = ctraj(T_q0,SE3(T0i_offset),N);
+    T0 = ctraj(T_q0,SE3(T0i_of),N);
     q{1} = Bichito.ikine(T0, q0, 'mask', [1 1 1 0 1 1],'q0',q0);
     Bichito.plot(q{1},'trail',{'r', 'LineWidth', 1,'LineStyle','--'});
 
@@ -95,8 +95,8 @@ function q = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, 
     
     %% Ploteo la trayectoria real vs. la recta obtenida por vision
     
-    xLine = linspace(piG(1), pfG(1), 100); % Puntos de la recta en x
-    yLine = linspace(piG(2), pfG(2), 100); % Puntos de la recta en y
+    xLine = linspace(pi(1), pf(1), 100); % Puntos de la recta en x
+    yLine = linspace(pi(2), pf(2), 100); % Puntos de la recta en y
 
     % Graficar la trayectoria
     figure;
