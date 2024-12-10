@@ -40,11 +40,11 @@ function q = controlPosition(Bichito, radios, q0, limitCoords, sheetDimensions, 
            0 1 0
            1 0 0];
 
-    % Matriz de transformación Sist. Global/pi
+    % Matriz de transformación Sist. de referencia del robot/pi
     Ti0 = [[Rh0' -Rh0' * pi]; [0 0 0 1]]; 
     T0i = inv(Ti0);
 
-    % Matriz de transformación Sist. Global/pf
+    % Matriz de transformación Sist. de referencia del robot/pf
     Tf0 = [[Rh0' -Rh0' * pf]; [0 0 0 1]]; 
     T0f = inv(Tf0);
     
